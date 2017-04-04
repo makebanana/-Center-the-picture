@@ -3,4 +3,195 @@
  * @version 1.0
  * @param {imgBox} Image adaptive parent element
  */
-var centerImg=function(imgBox){var getImgNaturalDimensions=function(img,callback){if(new Image().naturalHeight===0){return function(img,callback){var nWidth,nHeight;nWidth=img.naturalWidth;nHeight=img.naturalHeight;callback(nWidth,nHeight)}}else{return function(img,callback){var image=new Image();image.src=img.src;image.onload=function(){callback(image.width,image.height)}}}}();var setCss=function(dom,cssObj){if(!dom){return}for(var x in cssObj){dom.style[x]=cssObj[x]}};var getCss=function(dom,styleName){if(window.getComputedStyle){return function(dom,styleName){return window.getComputedStyle(dom,'').getPropertyValue(styleName)}}else{return function(dom,styleName){if(styleName.indexOf('-')>-1){styleName=styleName.replace(/\-(\w)/g,function(all,letter){return letter.toUpperCase()})};return dom.currentStyle[styleName]}}}();return function(imgBox){var _img=imgBox.getElementsByTagName('img')[0];if(getCss(imgBox,'position')!=='relative'||getCss(imgBox,'position')!=='absolute'){imgBox.style.position='relative'};var _boxW=parseInt(getCss(imgBox,'width'));var _boxH=parseInt(getCss(imgBox,'height'));var _ratio=Math.floor(_boxW/_boxH*10000)/10000;_img.addEventListener('load',function(){var _imgRatio;getImgNaturalDimensions(_img,function(a,b){_imgRatio=Math.floor(a/b*10000)/10000;if(_imgRatio>_ratio){var _reW=Math.floor((_boxH/b)*a);setCss(_img,{'position':'absolute','height':'100%','width':'auto','left':'50%','marginLeft':'-'+_reW/2+'px'})}if(_imgRatio<_ratio){var _reH=Math.floor((_boxW/a)*b);setCss(_img,{'position':'absolute','height':'auto','width':'100%','top':'50%','marginTop':'-'+_reH/2+'px'})}})})}}();if(window.F){F.module('centerImg',function(){return null})};
+var centerImg = function() {
+		/**
+		 * [support_css3 判断某个CSS3属性是否被支持]
+		 * @return {string} [可用的css3属性名称]
+		 */
+		var support_css3 = (function() {
+		   var div = document.createElement('div'),
+		      vendors = 'Ms O Moz Webkit'.split(' '),
+		      len = vendors.length;
+		 
+		   return function(prop) {
+		      if ( prop in div.style ){ return prop;}
+		 
+		      prop = prop.replace(/^[a-z]/, function(val) {
+		         return val.toUpperCase();
+		      });
+		 
+		      while(len--) {
+		         if ( vendors[len] + prop in div.style ) {
+		            return vendors[len] + prop;
+		         } 
+		      }
+		      return false;
+		   };
+		})();
+
+		var s_transform = support_css3('transform');
+		var s_transition = support_css3('transition');
+
+		/**
+		 * [getImgNaturalDimensions 获取图片真实尺寸]
+		 * @param  {DOM}   img      [图片对象]
+		 * @param  {Function} callback [获取尺寸之后的处理]
+		 */
+		var getImgNaturalDimensions = function(img, callback) {
+
+				if (img.naturalWidth !== undefined && img.naturalWidth > 0) {
+
+					callback(img.naturalWidth, img.naturalHeight)
+
+				} else {
+
+					var image = new Image();
+					image.src = img.src;
+					image.onload = function() {
+						callback(image.width, image.height)
+					};
+
+				}
+			};
+
+		/**
+		 * [setCss 简单设置行内样式]
+		 * @param {dom} dom    [description]
+		 * @param {object} cssObj [是以对象的形式，通过键值对设置]
+		 * @return {dom}           [返回dom元素对象]
+		 */
+		var setCss = function(dom, cssObj,isCss3) {
+
+				if (!dom) {
+					return;
+				}
+
+				for (var x in cssObj) {
+					
+					if(cssObj.hasOwnProperty(x)){
+						
+						dom.style[x] = cssObj[x];
+						console.log(dom.style[x],cssObj[x])
+					}
+					
+				}
+
+				return dom;
+			};
+
+		/**
+		 * [getCss 获取元素真实CSS值]
+		 * @return {function}           [返回一个该浏览器版本下可用的获取样式值函数]
+		 */
+		var getCss = function() {
+
+				if (window.getComputedStyle) {
+
+					return function(dom, styleName) {
+						return window.getComputedStyle(dom, '').getPropertyValue(styleName);
+					};
+
+				} else {
+
+					return function(dom, styleName) {
+
+						if (styleName.indexOf('-') > -1) {
+							styleName = styleName.replace(/\-(\w)/g, function(all, letter) {
+								return letter.toUpperCase();
+							})
+						};
+
+						return dom.currentStyle[styleName];
+					};
+				}
+			}();
+			/**
+			 * [description]
+			 * @param  {dom} imgBox [这个包裹这img元素的父亲元素]
+			 * @return {undefined}        [nothing need to return]
+			 */
+		return function(imgBox) {
+
+			var _img = imgBox.getElementsByTagName('img')[0];
+
+			if(getCss(imgBox, 'overflow') !== 'hidden'){
+				imgBox.style.overflow = 'hidden';
+			}
+
+			var _boxW = parseInt(getCss(imgBox, 'width'));
+			var _boxH = parseInt(getCss(imgBox, 'height'));
+			var _ratio = Math.floor(_boxW / _boxH * 10000) / 10000;
+
+			_img.addEventListener('load', function() {
+
+				var _imgRatio;
+
+				getImgNaturalDimensions(_img, function(a, b) {
+
+					_imgRatio = Math.floor(a / b * 10000) / 10000;
+
+					if (_imgRatio > _ratio) {
+
+						var _reW = Math.floor((_boxH / b) * a);
+
+						if(s_transform && s_transition){
+						
+							var cssObj = {
+								'height' : '100%',
+								'width' : 'auto'
+							};
+							cssObj[''+s_transform] = 'translateX(' +(_boxW - _reW)/2  + 'px' + ')';
+
+							cssObj[''+s_transition] = s_transform + ' 1s';
+
+							setCss(_img, cssObj);
+
+							cssObj = null;
+
+						}else{
+
+							setCss(_img, {
+								'height' : '100%',
+								'width' : 'auto',
+								'marginLeft' : (_boxW - _reW)/2  + 'px'
+							});
+						}
+						return;
+					}
+
+					if (_imgRatio < _ratio) {
+
+						var _reH = Math.floor((_boxW / a) * b);
+
+						if(s_transform && s_transition){
+
+							var cssObj = {
+								'height' : 'auto',
+								'width' : '100%'
+							};
+
+							cssObj[''+s_transform] = 'translateY(' +(_boxH  - _reH)/2  + 'px' + ')';
+
+							cssObj[''+s_transition] = s_transform + ' 1s';
+
+							setCss(_img, cssObj);
+
+							cssObj = null;
+							
+						}else{
+
+							setCss(_img, {
+								'height' : 'auto',
+								'width' : '100%',
+								'marginTop':  (_boxH -  _reH)/2 +'px'
+							});
+
+						}
+						
+
+						return;
+					}
+				})
+			})
+		}
+}();
