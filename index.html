@@ -2,9 +2,83 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>he </title>
+	<title>居中图片</title>
 </head>
+<style>
+	ul,
+	li,
+	span,
+	p,
+	img {
+		padding: 0;
+		margin: 0;
+	}
+	ul{
+		margin-left: 200px;
+		list-style: none;
+	}
+	li{
+		margin-top: 20px;
+	}
+	li p{
+		width: 400px;
+		height: 200px;
+		margin:20px 10px;
+		line-height: 200px;
+		overflow: hidden;
+		border: 1px solid #e3e3e3;
+		font-size: 0;
+	}
+
+	img{
+		width: 100%;
+		height: auto;
+		vertical-align: middle;
+	}
+
+</style>
 <body>
-	
+
+	<ul>
+		<li>
+			<h3>竖长图：当图片的宽高比小于1时( w/h < 1)</h3>
+		</li>
+		<li>
+			<span>使用前 p:200*400(显示顶部位置)</span>
+			<p>
+				<img src="http://img.ojutao.com/14913124889930e58e160-bba5-4d24-84bc-836e7da2c710EfC6kFnyeb.jpg" alt="" >
+			</a>
+		</li>
+		<li>
+			<span>使用后 p:200*400(显示中心位置)</span>
+			<p class="centerFa">
+				<img src="http://img.ojutao.com/14913124889930e58e160-bba5-4d24-84bc-836e7da2c710EfC6kFnyeb.jpg" alt="" >
+			</a>
+		</li>
+	</ul>
+	<ul>
+		<li>
+			<h3>横长图：当图片的宽高比大于1时( w/h > 1)</h3>
+		</li>
+
+		<li>
+			<span>使用前 p:200*400(虽全显,高度未被占满)</span>
+			<p>
+				<img src="http://img.ojutao.com/14913124889930e58e160-bba5-4d24-84bc-836e7da2c7103NiMxxMNJG.jpg" alt="" >
+			</a>
+		</li>
+		<li>
+			<span>使用后 p:200*400(显示了中间的位置)</span>
+			<p class="centerFa">
+				<img src="http://img.ojutao.com/14913124889930e58e160-bba5-4d24-84bc-836e7da2c7103NiMxxMNJG.jpg" alt="" >
+			</a>
+		</li>
+	</ul>
+	<script src="src/centerImg.js"></script>
+	<script>
+		[].forEach.call(document.querySelectorAll('.centerFa'),function(imgFa){
+			centerImg(imgFa);
+		})
+	</script>
 </body>
 </html>
