@@ -41,14 +41,14 @@ var centerImg = function() {
 
 				if (img.naturalWidth !== undefined && img.naturalWidth > 0) {
 
-					callback(img.naturalWidth, img.naturalHeight)
+					callback(img.naturalWidth, img.naturalHeight);
 
 				} else {
 
 					var image = new Image();
 					image.src = img.src;
 					image.onload = function() {
-						callback(image.width, image.height)
+						callback(image.width, image.height);
 					};
 
 				}
@@ -71,7 +71,7 @@ var centerImg = function() {
 					if(cssObj.hasOwnProperty(x)){
 						
 						dom.style[x] = cssObj[x];
-						console.log(dom.style[x],cssObj[x])
+
 					}
 					
 				}
@@ -98,8 +98,8 @@ var centerImg = function() {
 						if (styleName.indexOf('-') > -1) {
 							styleName = styleName.replace(/\-(\w)/g, function(all, letter) {
 								return letter.toUpperCase();
-							})
-						};
+							});
+						}
 
 						return dom.currentStyle[styleName];
 					};
@@ -124,74 +124,69 @@ var centerImg = function() {
 
 			_img.addEventListener('load', function() {
 
-				var _imgRatio;
-
 				getImgNaturalDimensions(_img, function(a, b) {
 
-					_imgRatio = Math.floor(a / b * 10000) / 10000;
+					var _imgRatio = Math.floor(a / b * 10000) / 10000;
+
+					var _reW,_reH,cssObj;
 
 					if (_imgRatio > _ratio) {
 
-						var _reW = Math.floor((_boxH / b) * a);
+						_reW = Math.floor((_boxH / b) * a);
 
-						if(s_transform && s_transition){
-						
-							var cssObj = {
+						cssObj = {
 								'height' : '100%',
 								'width' : 'auto'
 							};
+
+						if(s_transform && s_transition){
+												
 							cssObj[''+s_transform] = 'translateX(' +(_boxW - _reW)/2  + 'px' + ')';
 
 							cssObj[''+s_transition] = s_transform + ' 1s';
 
-							setCss(_img, cssObj);
-
-							cssObj = null;
-
 						}else{
 
-							setCss(_img, {
-								'height' : '100%',
-								'width' : 'auto',
-								'marginLeft' : (_boxW - _reW)/2  + 'px'
-							});
+							
+							cssObj.marginLeft = (_boxW - _reW)/2  + 'px';
+						
 						}
+
+						setCss(_img, cssObj);
+
+						cssObj = null;
+
 						return;
 					}
 
 					if (_imgRatio < _ratio) {
 
-						var _reH = Math.floor((_boxW / a) * b);
+						_reH = Math.floor((_boxW / a) * b);
 
-						if(s_transform && s_transition){
-
-							var cssObj = {
+						cssObj = {
 								'height' : 'auto',
 								'width' : '100%'
 							};
 
+						if(s_transform && s_transition){
+
 							cssObj[''+s_transform] = 'translateY(' +(_boxH  - _reH)/2  + 'px' + ')';
 
 							cssObj[''+s_transition] = s_transform + ' 1s';
-
-							setCss(_img, cssObj);
-
-							cssObj = null;
-							
+					
 						}else{
 
-							setCss(_img, {
-								'height' : 'auto',
-								'width' : '100%',
-								'marginTop':  (_boxH -  _reH)/2 +'px'
-							});
+							cssObj.marginTop = (_boxH -  _reH)/2 +'px';							
 
 						}
 						
+						setCss(_img, cssObj);
+
+						cssObj = null;
 
 						return;
 					}
-				})
-			})
-		}
+				});
+			});
+		};
 }();
