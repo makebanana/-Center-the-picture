@@ -1,7 +1,8 @@
 /**
  * @author makebanana
  * @version 1.0
- * @param {imgBox} Image adaptive parent element
+ * @github: https://github.com/makebanana/center-the-picture
+ * @email: 530547479@qq.com
  */
 var centerImg = function() {
 		/**
