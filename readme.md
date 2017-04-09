@@ -20,7 +20,7 @@
   <script src="src/centerImg.js"></script>
   <script>
       [].forEach.call(document.querySelectorAll('.item-link'),function(imgFa){
-        centerImg(imgFa);
+        centerImg(imgFa);//第二个参数为number 为过度效果持续的时间
       });
   </script>
 ```

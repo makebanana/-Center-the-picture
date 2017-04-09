@@ -107,13 +107,18 @@ var centerImg = function() {
 				}
 			}();
 			/**
-			 * [description]
-			 * @param  {dom} imgBox [这个包裹这img元素的父亲元素]
-			 * @return {undefined}        [nothing need to return]
+			 * [最终暴露函数]
+			 * @param  {dom} imgBox         [这个包裹这img元素的父亲元素]
+			 * @param  {number} cssDuration [css3过度动画执行时间]
+			 * @return {[type]}             [nothing need to return]
 			 */
-		return function(imgBox) {
-
+		return function(imgBox,cssDuration) {
+			
 			var _img = imgBox.getElementsByTagName('img')[0];
+
+			if(cssDuration === undefined){
+				cssDuration = 1;
+			}
 
 			if(getCss(imgBox, 'overflow') !== 'hidden'){
 				imgBox.style.overflow = 'hidden';
@@ -144,7 +149,7 @@ var centerImg = function() {
 												
 							cssObj[''+s_transform] = 'translateX(' +(_boxW - _reW)/2  + 'px' + ')';
 
-							cssObj[''+s_transition] = s_transform + ' 1s';
+							cssObj[''+s_transition] = s_transform + ' ' + cssDuration + 's';
 
 						}else{
 
@@ -173,7 +178,7 @@ var centerImg = function() {
 
 							cssObj[''+s_transform] = 'translateY(' +(_boxH  - _reH)/2  + 'px' + ')';
 
-							cssObj[''+s_transition] = s_transform + ' 1s';
+							cssObj[''+s_transition] = s_transform + ' ' + cssDuration + 's';
 					
 						}else{
 
