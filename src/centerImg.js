@@ -128,71 +128,71 @@ var centerImg = function() {
 			var _boxH = parseInt(getCss(imgBox, 'height'));
 			var _ratio = Math.floor(_boxW / _boxH * 10000) / 10000;
 
-			_img.addEventListener('load', function() {
+			
 
-				getImgNaturalDimensions(_img, function(a, b) {
+			getImgNaturalDimensions(_img, function(a, b) {
 
-					var _imgRatio = Math.floor(a / b * 10000) / 10000;
+				var _imgRatio = Math.floor(a / b * 10000) / 10000;
 
-					var _reW,_reH,cssObj;
+				var _reW,_reH,cssObj;
 
-					if (_imgRatio > _ratio) {
+				if (_imgRatio > _ratio) {
 
-						_reW = Math.floor((_boxH / b) * a);
+					_reW = Math.floor((_boxH / b) * a);
 
-						cssObj = {
-								'height' : '100%',
-								'width' : 'auto'
-							};
+					cssObj = {
+							'height' : '100%',
+							'width' : 'auto'
+						};
 
-						if(s_transform && s_transition){
-												
-							cssObj[''+s_transform] = 'translateX(' +(_boxW - _reW)/2  + 'px' + ')';
+					if(s_transform && s_transition){
+											
+						cssObj[''+s_transform] = 'translateX(' +(_boxW - _reW)/2  + 'px' + ')';
 
-							cssObj[''+s_transition] = s_transform + ' ' + cssDuration + 's';
+						cssObj[''+s_transition] = s_transform + ' ' + cssDuration + 's';
 
-						}else{
+					}else{
 
-							
-							cssObj.marginLeft = (_boxW - _reW)/2  + 'px';
 						
-						}
-
-						setCss(_img, cssObj);
-
-						cssObj = null;
-
-						return;
-					}
-
-					if (_imgRatio < _ratio) {
-
-						_reH = Math.floor((_boxW / a) * b);
-
-						cssObj = {
-								'height' : 'auto',
-								'width' : '100%'
-							};
-
-						if(s_transform && s_transition){
-
-							cssObj[''+s_transform] = 'translateY(' +(_boxH  - _reH)/2  + 'px' + ')';
-
-							cssObj[''+s_transition] = s_transform + ' ' + cssDuration + 's';
+						cssObj.marginLeft = (_boxW - _reW)/2  + 'px';
 					
-						}else{
-
-							cssObj.marginTop = (_boxH -  _reH)/2 +'px';							
-
-						}
-						
-						setCss(_img, cssObj);
-
-						cssObj = null;
-
-						return;
 					}
-				});
+
+					setCss(_img, cssObj);
+
+					cssObj = null;
+
+					return;
+				}
+
+				if (_imgRatio < _ratio) {
+
+					_reH = Math.floor((_boxW / a) * b);
+
+					cssObj = {
+							'height' : 'auto',
+							'width' : '100%'
+						};
+
+					if(s_transform && s_transition){
+
+						cssObj[''+s_transform] = 'translateY(' +(_boxH  - _reH)/2  + 'px' + ')';
+
+						cssObj[''+s_transition] = s_transform + ' ' + cssDuration + 's';
+				
+					}else{
+
+						cssObj.marginTop = (_boxH -  _reH)/2 +'px';							
+
+					}
+					
+					setCss(_img, cssObj);
+
+					cssObj = null;
+
+					return;
+				}
 			});
+
 		};
 }();
